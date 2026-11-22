@@ -821,6 +821,34 @@ fi
 
 
 ###############################################################################
+# 14.1 启用 BBR + fq（默认拥塞控制与队列）
+###############################################################################
+
+echo
+echo "========================================"
+echo "启用 BBR + fq"
+echo "========================================"
+
+sed -i \
+    '/^[[:space:]]*net\.core\.default_qdisc[[:space:]]*=/d' \
+    package/base-files/files/etc/sysctl.conf
+
+sed -i \
+    '/^[[:space:]]*net\.ipv4\.tcp_congestion_control[[:space:]]*=/d' \
+    package/base-files/files/etc/sysctl.conf
+
+echo \
+    'net.core.default_qdisc=fq' \
+    >> package/base-files/files/etc/sysctl.conf
+
+echo \
+    'net.ipv4.tcp_congestion_control=bbr' \
+    >> package/base-files/files/etc/sysctl.conf
+
+echo "default_qdisc = fq, tcp_congestion_control = bbr"
+
+
+###############################################################################
 # 15. DIY2 完成
 ###############################################################################
 
