@@ -2,7 +2,7 @@
 # ImmortalWrt 配置文件
 # 平台：Qualcomm NSS
 # 内核：Linux 6.x
-# 设备：Xiaomi AX3600（无 USB，dae + daed，已剔除其他代理插件）
+# 设备：Xiaomi AX3600（无 USB，dae + daed，已剔除其他代理插件和 NAS 组件）
 #
 
 # ==================== 目标平台 ====================
@@ -208,7 +208,7 @@ CONFIG_KERNEL_SKB_RECYCLER_MULTI_CPU=y
 
 CONFIG_PACKAGE_apk-openssl=y
 CONFIG_PACKAGE_base-files=y
-CONFIG_PACKAGE_block-mount=y
+# CONFIG_PACKAGE_block-mount is not set
 CONFIG_PACKAGE_busybox=y
 CONFIG_PACKAGE_ca-bundle=y
 
@@ -285,18 +285,18 @@ CONFIG_PACKAGE_wireless-regdb=y
 # CONFIG_PACKAGE_libnvme=y
 # CONFIG_PACKAGE_nvme-cli=y
 
-CONFIG_PACKAGE_kmod-loop=y
-CONFIG_PACKAGE_kmod-scsi-core=y
-CONFIG_PACKAGE_kmod-fs-btrfs=y
-CONFIG_PACKAGE_kmod-fs-exfat=y
-CONFIG_PACKAGE_kmod-fs-ext4=y
-CONFIG_PACKAGE_kmod-fs-f2fs=y
-CONFIG_PACKAGE_kmod-fs-ksmbd=y
-CONFIG_PACKAGE_kmod-fs-netfs=y
-CONFIG_PACKAGE_kmod-fs-ntfs3=y
-CONFIG_PACKAGE_kmod-fs-smbfs-common=y
-CONFIG_PACKAGE_kmod-fs-vfat=y
-CONFIG_PACKAGE_kmod-fuse=y
+# CONFIG_PACKAGE_kmod-loop is not set
+# CONFIG_PACKAGE_kmod-scsi-core is not set
+# CONFIG_PACKAGE_kmod-fs-btrfs is not set
+# CONFIG_PACKAGE_kmod-fs-exfat is not set
+# CONFIG_PACKAGE_kmod-fs-ext4 is not set
+# CONFIG_PACKAGE_kmod-fs-f2fs is not set
+# CONFIG_PACKAGE_kmod-fs-ksmbd is not set
+# CONFIG_PACKAGE_kmod-fs-netfs is not set
+# CONFIG_PACKAGE_kmod-fs-ntfs3 is not set
+# CONFIG_PACKAGE_kmod-fs-smbfs-common is not set
+# CONFIG_PACKAGE_kmod-fs-vfat is not set
+# CONFIG_PACKAGE_kmod-fuse is not set
 
 # ==================== 加密 ====================
 
@@ -675,8 +675,8 @@ CONFIG_PACKAGE_libelf=y
 CONFIG_PACKAGE_libevdev=y
 CONFIG_PACKAGE_libexpat=y
 CONFIG_PACKAGE_libext2fs=y
-CONFIG_PACKAGE_libf2fs=y
-CONFIG_PACKAGE_libfdisk=y
+# CONFIG_PACKAGE_libf2fs is not set
+# CONFIG_PACKAGE_libfdisk is not set
 CONFIG_PACKAGE_libgmp=y
 CONFIG_PACKAGE_libiperf3=y
 CONFIG_PACKAGE_libiwinfo=y
@@ -695,7 +695,7 @@ CONFIG_PACKAGE_libnfnetlink=y
 CONFIG_PACKAGE_libnftnl=y
 CONFIG_PACKAGE_libnghttp2=y
 CONFIG_PACKAGE_libnl-tiny=y
-CONFIG_PACKAGE_libparted=y
+# CONFIG_PACKAGE_libparted is not set
 CONFIG_PACKAGE_libpopt=y
 CONFIG_PACKAGE_libreadline=y
 CONFIG_PACKAGE_libsmartcols=y
@@ -746,7 +746,7 @@ CONFIG_PACKAGE_luci-app-firewall=y
 CONFIG_PACKAGE_luci-app-fullconenat-sonic=y
 CONFIG_PACKAGE_luci-app-natmapt=y
 CONFIG_PACKAGE_luci-app-package-manager=y
-CONFIG_PACKAGE_luci-app-partexp=y
+# CONFIG_PACKAGE_luci-app-partexp is not set
 # CONFIG_PACKAGE_luci-app-passwall_Nftables_Transparent_Proxy is not set
 # CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Geoview is not set
 # CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Haproxy is not set
@@ -1022,7 +1022,7 @@ CONFIG_PACKAGE_luci-theme-bootstrap=y
 
 # ==================== 其他 LuCI ====================
 
-CONFIG_PACKAGE_luci-app-mini-diskmanager=y
+# CONFIG_PACKAGE_luci-app-mini-diskmanager is not set
 CONFIG_PACKAGE_luci-app-wolultra=y
 
 # ==================== LuCI 协议 ====================
@@ -1050,10 +1050,10 @@ CONFIG_PACKAGE_luci-i18n-firewall-zh-cn=y
 CONFIG_PACKAGE_luci-i18n-fullconenat-sonic-zh-cn=y
 # CONFIG_PACKAGE_luci-i18n-gecoosac-zh-cn is not set
 # CONFIG_PACKAGE_luci-i18n-homeproxy-zh-cn is not set
-CONFIG_PACKAGE_luci-i18n-mini-diskmanager-zh-cn=y
+# CONFIG_PACKAGE_luci-i18n-mini-diskmanager-zh-cn is not set
 CONFIG_PACKAGE_luci-i18n-natmapt-zh-cn=y
 CONFIG_PACKAGE_luci-i18n-package-manager-zh-cn=y
-CONFIG_PACKAGE_luci-i18n-partexp-zh-cn=y
+# CONFIG_PACKAGE_luci-i18n-partexp-zh-cn is not set
 # CONFIG_PACKAGE_luci-i18n-samba4-zh-cn is not set
 CONFIG_PACKAGE_luci-i18n-upnp-zh-cn=y
 # CONFIG_PACKAGE_luci-i18n-wolultra-zh-cn is not set
@@ -1108,28 +1108,28 @@ CONFIG_PACKAGE_uclient-fetch=y
 CONFIG_PACKAGE_uboot-envtools=y
 CONFIG_PACKAGE_unzip=y
 CONFIG_PACKAGE_xz-utils=y
-CONFIG_PACKAGE_blkid=y
-CONFIG_PACKAGE_cfdisk=y
-CONFIG_PACKAGE_cgdisk=y
-CONFIG_PACKAGE_fdisk=y
-CONFIG_PACKAGE_gdisk=y
-CONFIG_PACKAGE_lsblk=y
-CONFIG_PACKAGE_nvme-cli=y
-CONFIG_PACKAGE_parted=y
-CONFIG_PARTED_READLINE=y
-CONFIG_PACKAGE_sfdisk=y
-CONFIG_PACKAGE_sgdisk=y
+# CONFIG_PACKAGE_blkid is not set
+# CONFIG_PACKAGE_cfdisk is not set
+# CONFIG_PACKAGE_cgdisk is not set
+# CONFIG_PACKAGE_fdisk is not set
+# CONFIG_PACKAGE_gdisk is not set
+# CONFIG_PACKAGE_lsblk is not set
+# CONFIG_PACKAGE_nvme-cli is not set
+# CONFIG_PACKAGE_parted is not set
+# CONFIG_PARTED_READLINE is not set
+# CONFIG_PACKAGE_sfdisk is not set
+# CONFIG_PACKAGE_sgdisk is not set
 
-CONFIG_PACKAGE_attr=y
-CONFIG_PACKAGE_btrfs-progs=y
-CONFIG_PACKAGE_e2fsprogs=y
-CONFIG_PACKAGE_exfat-fsck=y
-CONFIG_PACKAGE_exfat-mkfs=y
-CONFIG_PACKAGE_f2fs-tools=y
-CONFIG_PACKAGE_f2fsck=y
-CONFIG_PACKAGE_mkf2fs=y
-CONFIG_PACKAGE_ntfs3-mount=y
-CONFIG_PACKAGE_resize2fs=y
+# CONFIG_PACKAGE_attr is not set
+# CONFIG_PACKAGE_btrfs-progs is not set
+# CONFIG_PACKAGE_e2fsprogs is not set
+# CONFIG_PACKAGE_exfat-fsck is not set
+# CONFIG_PACKAGE_exfat-mkfs is not set
+# CONFIG_PACKAGE_f2fs-tools is not set
+# CONFIG_PACKAGE_f2fsck is not set
+# CONFIG_PACKAGE_mkf2fs is not set
+# CONFIG_PACKAGE_ntfs3-mount is not set
+# CONFIG_PACKAGE_resize2fs is not set
 
 # ==================== 系统工具 ====================
 

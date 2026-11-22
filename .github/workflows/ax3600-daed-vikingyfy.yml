@@ -136,6 +136,8 @@ jobs:
         done
         BAD=$(grep -E '^CONFIG_PACKAGE_(luci-app-(passwall|passwall2|ssr-plus|openclash|clashoo|homeproxy|nikki|momo|fchomo|v2raya|bypass|vssr)|xray-core|v2ray-core|sing-box|mihomo|shadowsocks-rust|shadowsocksr-libev|trojan|hysteria|naiveproxy)=y' .config || true)
         if [ -n "$BAD" ]; then echo "仍有代理插件被选中："; echo "$BAD"; exit 1; fi
+        NAS=$(grep -E '^CONFIG_PACKAGE_(luci-app-(samba4|ksmbd|diskman|mini-diskmanager|partexp|hd-idle|aria2|transmission|qbittorrent|alist|openlist|ddnsto|linkease|quickstart|istorex|nfs|vsftpd|unishare|minidlna|dockerman|filebrowser)|samba4-server|ksmbd-server|kmod-fs-ksmbd|nfs-kernel-server|kmod-fuse)=y' .config || true)
+        if [ -n "$NAS" ]; then echo "仍有 NAS/存储插件被选中："; echo "$NAS"; exit 1; fi
         echo "检查通过"
 
     - name: 仅输出完整配置
@@ -248,7 +250,7 @@ jobs:
       if: steps.organize.outcome == 'success' && env.UPLOAD_RELEASE == 'true'
       run: |
         touch release.txt
-        echo "Xiaomi AX3600 · VIKINGYFY ImmortalWrt owrt（无 USB） · 集成 dae + daed + luci-app-daede，已剔除 PassWall/SSR+/OpenClash/Clashoo 等代理插件" >> release.txt
+        echo "Xiaomi AX3600 · VIKINGYFY ImmortalWrt owrt（无 USB） · 集成 dae + daed + luci-app-daede，已剔除 PassWall/SSR+/OpenClash/Clashoo 等代理插件及 NAS/磁盘管理组件" >> release.txt
         echo "当前配置: ${{ matrix.config }}" >> release.txt
         echo "📥 固件下载" >> release.txt
 
