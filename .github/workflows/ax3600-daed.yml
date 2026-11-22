@@ -91,6 +91,10 @@ jobs:
       working-directory: ./openwrt
       run: |
         ./scripts/feeds update -a
+        # dae 2026.11.21 的 go.mod 要求 go >= 1.27，immortalwrt packages(openwrt-25.12) 只有 1.26，换成 sbwml 27.x
+        rm -rf feeds/packages/lang/golang
+        git clone --depth 1 -b 27.x https://github.com/sbwml/packages_lang_golang feeds/packages/lang/golang
+        grep -m2 'GO_VERSION_' feeds/packages/lang/golang/golang/Makefile
         ./scripts/feeds install -a
 
     - name: 加载config 执行DIY_P2_SH defconfig
