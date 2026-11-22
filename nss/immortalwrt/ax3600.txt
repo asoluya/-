@@ -2,7 +2,7 @@
 # ImmortalWrt 配置文件
 # 平台：Qualcomm NSS
 # 内核：Linux 6.x
-# 设备：Xiaomi AX3600（无 USB，仅 daed，已剔除其他代理插件）
+# 设备：Xiaomi AX3600（无 USB，dae + daed，已剔除其他代理插件）
 #
 
 # ==================== 目标平台 ====================
@@ -770,7 +770,7 @@ CONFIG_PACKAGE_luci-app-upnp=y
 
 
 # 集成daede后端内核仅一个常用
-# CONFIG_PACKAGE_dae is not set
+CONFIG_PACKAGE_dae=y
 CONFIG_PACKAGE_daed=y
 # daed可用分流包
 CONFIG_PACKAGE_daed-geoip=y

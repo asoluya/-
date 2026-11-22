@@ -101,10 +101,27 @@ jobs:
         "${GITHUB_WORKSPACE}/${{ env.DIY_P2_SH }}"
         make defconfig
 
+    - name: 锁定 dae / daed / luci-app-daede 来源为 kenzok8/small
+      working-directory: ./openwrt
+      run: |
+        # 官方 packages 里的 daed 版本较旧，不认识新版 luci-app-daede 写入的 check_dns_tcp 等键。
+        for pkg in dae daed luci-app-daede; do
+          [ -f "feeds/small/${pkg}/Makefile" ] || { echo "small 中缺少 ${pkg}"; exit 1; }
+          rm -rf "package/feeds/"*"/${pkg}"
+        done
+        ./scripts/feeds install -p small -f dae daed luci-app-daede
+        for pkg in dae daed luci-app-daede; do
+          target=$(readlink -f "package/feeds/small/${pkg}")
+          echo "${pkg} -> ${target}"
+          case "$target" in */feeds/small/${pkg}) ;; *) echo "${pkg} 来源不对"; exit 1;; esac
+          grep -m1 PKG_VERSION "feeds/small/${pkg}/Makefile"
+        done
+        make defconfig
+
     - name: 检查 daed 已选中、代理插件已剔除
       working-directory: ./openwrt
       run: |
-        for p in daed luci-app-daede; do
+        for p in dae daed luci-app-daede; do
           grep -q "^CONFIG_PACKAGE_${p}=y" .config || { echo "缺少 $p"; exit 1; }
         done
         BAD=$(grep -E '^CONFIG_PACKAGE_(luci-app-(passwall|passwall2|ssr-plus|openclash|clashoo|homeproxy|nikki|momo|fchomo|v2raya|bypass|vssr)|xray-core|v2ray-core|sing-box|mihomo|shadowsocks-rust|shadowsocksr-libev|trojan|hysteria|naiveproxy)=y' .config || true)
@@ -272,7 +289,7 @@ jobs:
       if: steps.organize.outcome == 'success' && env.UPLOAD_RELEASE == 'true'
       run: |
         touch release.txt
-        echo "Xiaomi AX3600 · LibWrt 25.12-nss · 仅集成 daed + luci-app-daede，已剔除 PassWall/SSR+/OpenClash/Clashoo 等代理插件" >> release.txt
+        echo "Xiaomi AX3600 · LibWrt 25.12-nss · 集成 dae + daed + luci-app-daede，已剔除 PassWall/SSR+/OpenClash/Clashoo 等代理插件" >> release.txt
         echo "当前配置: ${{ matrix.config }}" >> release.txt
         echo "📥 固件下载" >> release.txt
 
