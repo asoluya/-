@@ -114,6 +114,14 @@ jobs:
           rm -rf "package/feeds/"*"/${pkg}"
         done
         ./scripts/feeds install -p small -f dae daed luci-app-daede
+        # small 同步 dae/daed 时漏了 ../ci/patches（Makefile 依赖它，否则 Build/Prepare 直接失败），从 kenzok8/openwrt-daede 补上。
+        if [ ! -s feeds/small/ci/patches/dae-core/0001-keep-protocol-wrappers-in-tcp-relay.patch ]; then
+          rm -rf /tmp/openwrt-daede
+          git clone --depth 1 https://github.com/kenzok8/openwrt-daede.git /tmp/openwrt-daede
+          mkdir -p feeds/small/ci
+          cp -a /tmp/openwrt-daede/ci/. feeds/small/ci/
+        fi
+        ls -l feeds/small/ci/patches/dae-core/
         for pkg in dae daed luci-app-daede; do
           target=$(readlink -f "package/feeds/small/${pkg}")
           echo "${pkg} -> ${target}"
