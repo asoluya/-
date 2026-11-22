@@ -105,28 +105,22 @@ jobs:
         "${GITHUB_WORKSPACE}/${{ env.DIY_P2_SH }}"
         make defconfig
 
-    - name: 锁定 dae / daed / luci-app-daede 来源为 kenzok8/small
+    - name: 锁定 dae / daed / luci-app-daede 来源为 kenzok8/openwrt-daede
       working-directory: ./openwrt
       run: |
+        # dae / daed / luci-app-daede 统一使用 kenzok8/openwrt-daede 仓库（daede feed）。
         # 官方 packages 里的 daed 版本较旧，不认识新版 luci-app-daede 写入的 check_dns_tcp 等键。
+        # daede feed 根目录自带 ci/，Makefile 依赖的 ../ci/patches 开箱可用，无需额外补丁步骤。
         for pkg in dae daed luci-app-daede; do
-          [ -f "feeds/small/${pkg}/Makefile" ] || { echo "small 中缺少 ${pkg}"; exit 1; }
+          [ -f "feeds/daede/${pkg}/Makefile" ] || { echo "daede 中缺少 ${pkg}"; exit 1; }
           rm -rf "package/feeds/"*"/${pkg}"
         done
-        ./scripts/feeds install -p small -f dae daed luci-app-daede
-        # small 同步 dae/daed 时漏了 ../ci/patches（Makefile 依赖它，否则 Build/Prepare 直接失败），从 kenzok8/openwrt-daede 补上。
-        if [ ! -s feeds/small/ci/patches/dae-core/0001-keep-protocol-wrappers-in-tcp-relay.patch ]; then
-          rm -rf /tmp/openwrt-daede
-          git clone --depth 1 https://github.com/kenzok8/openwrt-daede.git /tmp/openwrt-daede
-          mkdir -p feeds/small/ci
-          cp -a /tmp/openwrt-daede/ci/. feeds/small/ci/
-        fi
-        ls -l feeds/small/ci/patches/dae-core/
+        ./scripts/feeds install -p daede -f dae daed luci-app-daede
         for pkg in dae daed luci-app-daede; do
-          target=$(readlink -f "package/feeds/small/${pkg}")
+          target=$(readlink -f "package/feeds/daede/${pkg}")
           echo "${pkg} -> ${target}"
-          case "$target" in */feeds/small/${pkg}) ;; *) echo "${pkg} 来源不对"; exit 1;; esac
-          grep -m1 PKG_VERSION "feeds/small/${pkg}/Makefile"
+          case "$target" in */feeds/daede/${pkg}) ;; *) echo "${pkg} 来源不对"; exit 1;; esac
+          grep -m1 PKG_VERSION "feeds/daede/${pkg}/Makefile"
         done
         make defconfig
 

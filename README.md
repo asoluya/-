@@ -1,211 +1,71 @@
-# QCA All-in-One
+# AX3600 LibWrt 固件编译
 
-Qualcomm IPQ60xx / IPQ807x 多设备 OpenWrt / LibWrt 自动编译项目。
-
-本项目集成 Daede/Daed、Qualcomm NSS、BPF/XDP 以及多种常用网络、代理、存储和系统管理插件，无线默认无密码或者12345678，连接数655550，并提供多设备配置及 GitHub Actions 自动编译。
-注意🤔:如果不需要大鹅，在配置文件中删掉换其他的，大鹅完整太占内存了，对小内存不友好，个人觉得大鹅适合X86
-## 编译源码
-
-本项目根据不同编译工作流使用以下源码：
-
-### LibWrt
-
-- 源码：https://github.com/LiBwrt/LibWrt
-- 分支：`25.12-nss`
-
-### VIKINGYFY ImmortalWrt
-
-- 源码：https://github.com/VIKINGYFY/immortalwrt
-- 分支：`owrt`切换原生 Qualcomm 硬件流加速&暂时保留nss的编译
-
-### 项目源码
-
-- https://github.com/googlewmb/qca-all-in-one
+小米 AX3600 专用 OpenWrt / LibWrt 自动编译项目，只保留 AX3600 一个设备，定位为：基础网络功能 + 满血 Qualcomm NSS + dae / daed。
 
 ## 支持设备
 
-本项目支持 Qualcomm IPQ60xx / IPQ807x 多款设备，已集成完整 Daede/Daed 环境、Qualcomm NSS、BPF/XDP 原生Qualcomm 硬件流加速以及常用插件。
-
-### IPQ60xx
-
-- 360 V6
-- AnySafe E1
-- CMIOT AX18
-- DPTech AP3000-2C
-- GL.iNet GL-AX1800
-- GL.iNet GL-AXT1800
-- JDCloud RE-CS-02
-- JDCloud RE-SS-01
-- Link NN6000 V1
-- Link NN6000 V2
-- Linksys MR7350
-- Linksys MR7500
-- Philips LY1800
-- Redmi AX5
-- Redmi AX5 JDCloud
-- SY-Y6010
-- Xiaomi AX1800
-- ZN M2
-
-### IPQ807x
-
-- Aliyun AP8220
-- Xiaomi AX9000
-- Xiaomi AX9000 Stock
-
-### IPQ807x 无 USB
-
-- Redmi AX6
-- Redmi AX6 Stock
 - Xiaomi AX3600
 - Xiaomi AX3600 Stock
 
-## Daede / Daed
+平台：Qualcomm IPQ807x（qualcommax / ipq807x，无 USB）。
 
-所有设备配置均已集成 Daede/Daed 相关环境，并根据不同平台提供对应的内核、BPF/XDP、Qualcomm NSS 等支持。
+## 编译源码
 
-主要包括：
+- 源码：[LiBwrt/LibWrt](https://github.com/LiBwrt/LibWrt)
+- 分支：`25.12-nss`
+- 配置文件：`nss/immortalwrt/ax3600.txt`（同时生成 AX3600 与 AX3600 Stock 两个目标）
 
-- Daede / Daed
-- BPF
-- CGROUP
-- CGROUP_BPF
-- BPF Events
-- XDP
-- XDP Sockets
-- BPF Toolchain
-- Qualcomm NSS
-- NSS ECM
-- NSS DP
-- NSS Crypto
-- NSS Bridge Manager
-- NSS PPPoE
-- NSS VLAN Manager
-- NSS VXLAN
-- NSS GRE
-- NSS L2TP
-- NSS PPTP
-- NSS Qdisc
-- NSS Netlink
-- NSS Mirror
-- NSS MAP-T
-- NSS Tun6RD
-- NSS TunIPIP6
-- Qualcomm SSDK
+## 功能
 
-不同设备根据硬件平台和内核版本使用对应的配置。
+### 基础网络
 
-## 已集成插件
-
-项目配置文件已经集成多种常用插件，包括：
-
-- PassWall
-- Daede / Daed
+- LuCI 管理界面（中文）
+- firewall4 防火墙
+- dnsmasq-full（DHCP / DHCPv6 / DNSSEC / nftset 等完整功能）
+- PPPoE 拨号、IPv6（odhcp6c / odhcpd）
+- UPnP（miniupnpd-nftables）
+- FullCone NAT（fullconenat-sonic）
+- NATMap / STUNTMAN（NAT 打洞）
 - SmartDNS
-- MosDNS
-- WireGuard
-- UPnP
-- DDNS-Go
-- Lucky
-- Samba4
-- Diskman
-- FileTransfer
-- MiniDLNA
-- TTYD
-- WOLPlus
-- CPUFreq
-- RAMFree
-- 自动重启
-- 软件包管理器
-- 时间控制
-- HD Idle
 
-不同设备的插件配置可能有所不同，以对应设备的 `.config` 为准。
+### 满血 Qualcomm NSS
 
-## 第三方插件源码
+NSS 驱动功能全部开启，包括：
 
-项目通过 DIY 脚本及第三方 feeds 集成插件源码和相关依赖。
+- 基础：NSS DP、SSDK、ECM、Crypto（含 EIP 固件）、Bridge Manager、VLAN Manager、LAG Manager、Mirror、Match、Netlink、Qdisc / Shaper、IGS
+- 隧道与拨号：PPPoE、PPTP、L2TP、GRE（含 GRE Redir）、VXLAN、MAP-T、Tun6RD、TunIPIP6、IPv6、Virt-IF
+- 无线：WiFi Offload、WiFi Mesh Manager、ATH11K NSS Support
 
-### PassWall
+对应软件包：nss-firmware、nss-eip-firmware、kmod-qca-nss-dp、kmod-qca-ssdk、kmod-qca-nss-ecm、kmod-qca-nss-crypto 及全部 kmod-qca-nss-drv-* 子驱动。
 
-- https://github.com/Openwrt-Passwall/openwrt-passwall
-- https://github.com/Openwrt-Passwall/openwrt-passwall-packages
+### dae / daed
 
-### OpenClash
+- 组件：dae + daed + luci-app-daede，两个后端的依赖全部配齐（kmod-sched-core、kmod-sched-bpf、kmod-veth、v2ray-geoip、v2ray-geosite、ca-bundle、curl 等）
+- 来源：[kenzok8/openwrt-daede](https://github.com/kenzok8/openwrt-daede)，在 diy-part1 中以 `daede` feed 引入，编译时由工作流锁定 dae / daed / luci-app-daede 只从该 feed 安装
+- 内核：已开启 BPF / CGROUP_BPF / BPF Events / XDP Sockets / 内核 BTF（CONFIG_KERNEL_DEBUG_INFO_BTF），BPF 工具链使用主机 clang（CONFIG_BPF_TOOLCHAIN_HOST）
 
-- https://github.com/vernesong/OpenClash
+## 编译方法
 
-### SmartDNS
+使用 GitHub Actions 云编译：
 
-- https://github.com/pymumu/smartdns
-- https://github.com/pymumu/luci-app-smartdns
+1. 打开本仓库 Actions 页面
+2. 选择工作流 **AX3600_daed-only-libwrt**
+3. 点击 **Run workflow** 开始编译
+4. 编译完成后在该次运行的 Release / Artifacts 中下载固件（factory.ubi / sysupgrade.bin，含 Stock 版）
 
-### MosDNS
+可选参数：`BUILD_CONFIG_ONLY` 设为 true 时仅输出完整配置（.config），不编译固件，适合改配置后先验证。
 
-- https://github.com/sbwml/luci-app-mosdns
+## 仓库结构
 
-### HomeProxy
+```
+.github/workflows/ax3600-daed.yml   AX3600 LibWrt 编译工作流
+.github/workflows/clean.yaml        定时清理旧 Release / 工作流记录
+nss/immortalwrt/ax3600.txt          AX3600 编译配置（种子 .config）
+nss/diy-part1.sh                    DIY 第一阶段：拉取第三方插件源码、添加 feeds（含 daede）
+nss/diy-part3.sh                    DIY 第二阶段：第三方依赖与来源优先级处理
+```
 
-- https://github.com/immortalwrt/homeproxy
+## 说明
 
-### V2Ray GeoData
-
-- https://github.com/sbwml/v2ray-geodata
-
-### OLED
-
-- https://github.com/jjm2473/luci-app-oled
-
-### LCDSimple
-
-- https://github.com/jjm2473/lcdsimple
-
-### Diskman
-
-- https://github.com/jjm2473/luci-app-diskman
-
-### OpenAppFilter
-
-- https://github.com/jjm2473/OpenAppFilter
-
-### NATMap
-
-- https://github.com/muink/openwrt-natmapt
-
-### STUNTMAN
-
-- https://github.com/muink/openwrt-stuntman
-
-### NATMap LuCI
-
-- https://github.com/muink/luci-app-natmapt
-
-## 第三方 Feeds
-
-项目同时使用多个第三方 feeds：
-
-### 官方 Feeds
-
-- packages
-- luci
-- routing
-- telephony
-- store
-- third
-
-### 第三方 Feeds
-
-- nas
-- nas_luci
-- jjm2473_apps
-- kenzo
-- small
-
-项目通过 DIY 脚本对第三方插件及官方 feeds 中的重复软件包进行处理，并优先使用项目自定义源码。
-
-## 自定义插件
-
-需要增加其他插件时，直接在对应设备配置文件中添加：
-
-```text
-CONFIG_PACKAGE_插件名称=y
+- 无线默认无密码或者 12345678，刷机后请第一时间修改。
+- 本项目基于 [googlewmb/qca-all-in-one](https://github.com/googlewmb/qca-all-in-one) 精简而来，只保留 AX3600 + LibWrt 部分。
