@@ -872,6 +872,36 @@ done
 
 
 ###############################################################################
+# 14.3 默认关闭防火墙流量卸载（软件 / 硬件）
+# OpenWrt 自带的 nftables 流量卸载会抢在 NSS ECM 之前处理流量，使 ECM
+# 无法加速（实测千兆下载 CPU 约 20%；关闭后接近 0）。通过 uci-defaults
+# 在首次启动时把 defaults 段的 flow_offloading 与 flow_offloading_hw
+# 置 0，刷机 / 恢复出厂后即为关闭状态。
+###############################################################################
+
+echo
+echo "========================================"
+echo "写入 uci-defaults：默认关闭流量卸载"
+echo "========================================"
+
+mkdir -p package/base-files/files/etc/uci-defaults
+
+cat > package/base-files/files/etc/uci-defaults/99-disable-flow-offloading <<'EOF'
+#!/bin/sh
+
+uci set firewall.@defaults[0].flow_offloading='0'
+uci set firewall.@defaults[0].flow_offloading_hw='0'
+uci commit firewall
+
+exit 0
+EOF
+
+chmod +x package/base-files/files/etc/uci-defaults/99-disable-flow-offloading
+
+echo "已生成 99-disable-flow-offloading"
+
+
+###############################################################################
 # 15. DIY2 完成
 ###############################################################################
 
