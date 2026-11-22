@@ -26,7 +26,6 @@
 - UPnP（miniupnpd-nftables）
 - FullCone NAT（fullconenat-sonic）
 - NATMap / STUNTMAN（NAT 打洞）
-- SmartDNS
 
 ### 满血 Qualcomm NSS
 
