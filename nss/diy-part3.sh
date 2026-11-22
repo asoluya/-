@@ -492,36 +492,6 @@ done
 
 
 ###############################################################################
-# 9. SmartDNS Rust Makefile 修复
-###############################################################################
-
-echo
-echo "========================================"
-echo "修复 SmartDNS Rust Makefile"
-echo "========================================"
-
-if [ -f package/myapp/smartdns/package/openwrt/Makefile ]; then
-
-    sed -i \
-        's@include ../../lang/rust/rust-package.mk@include $(TOPDIR)/feeds/packages/lang/rust/rust-package.mk@g' \
-        package/myapp/smartdns/package/openwrt/Makefile
-
-    echo "已修复: package/myapp/smartdns/package/openwrt/Makefile"
-
-fi
-
-if [ -f package/myapp/smartdns/Makefile ]; then
-
-    sed -i \
-        's@include ../../lang/rust/rust-package.mk@include $(TOPDIR)/feeds/packages/lang/rust/rust-package.mk@g' \
-        package/myapp/smartdns/Makefile
-
-    echo "已修复: package/myapp/smartdns/Makefile"
-
-fi
-
-
-###############################################################################
 # 10. 自动添加 LuCI 中文语言包 (移除了内部 make defconfig)
 ###############################################################################
 
