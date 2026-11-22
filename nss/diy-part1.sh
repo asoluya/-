@@ -11,18 +11,6 @@ echo "DIY1 - 下载第三方插件"
 mkdir -p package/myapp
 cd package/myapp
 
-# SmartDNS 核心（官方 OpenWrt 软件包）
-# 上游核心源码：https://github.com/pymumu/smartdns
-# OpenWrt 软件包：https://github.com/pymumu/openwrt-smartdns
-git clone -b master --depth 1 \
-https://github.com/pymumu/openwrt-smartdns.git \
-smartdns
-
-# SmartDNS LuCI 管理界面
-git clone -b master --depth 1 \
-https://github.com/pymumu/luci-app-smartdns.git \
-luci-app-smartdns
-
 # V2Ray GeoData
 #git clone --depth 1 \
 #https://github.com/sbwml/v2ray-geodata.git \
