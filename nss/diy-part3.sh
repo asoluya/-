@@ -849,29 +849,6 @@ echo "default_qdisc = fq, tcp_congestion_control = bbr"
 
 
 ###############################################################################
-# 14.2 dae / daed 强制使用 Go 1.27 构建
-# dae / daed 2026.11.21 的 go.mod 要求 go >= 1.27.0，而软件源默认 Go 为
-# 1.26（GO_DEFAULT_VERSION:=1.26），直接编译会报
-# "go.mod requires go >= 1.27.0 (running go 1.26.x)" 并导致整机构建失败
-# （run #5 即因此失败）。这里把两个包的构建依赖指定到 golang1.27/host。
-###############################################################################
-
-echo
-echo "========================================"
-echo "dae / daed 切换到 golang1.27 构建"
-echo "========================================"
-
-for mk in feeds/daede/dae/Makefile feeds/daede/daed/Makefile; do
-    if [ -f "$mk" ]; then
-        sed -i 's|golang/host|golang1.27/host|g' "$mk"
-        echo "$mk: $(grep -m1 'PKG_BUILD_DEPENDS' "$mk")"
-    else
-        echo "警告: 未找到 $mk，跳过"
-    fi
-done
-
-
-###############################################################################
 # 15. DIY2 完成
 ###############################################################################
 
