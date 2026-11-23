@@ -554,20 +554,23 @@ echo "nf_conntrack_max = 655550"
 
 
 ###############################################################################
-# 12. Wi-Fi 首次启动自动开启（更稳健）
+# 12. Wi-Fi 首次启动仅生成配置（不强制开启）
+# 旧版在这里写 zz-enable-wifi 强制把所有无线置 disabled=0，导致刷机
+# 保留配置时被手动关闭的无线（QCA9887）每次都被重新打开。现改为只
+# 确保无线配置已生成，不修改任何 disabled 状态、不主动 wifi up，
+# 无线开关与刷机前保持一致。工作流随后会写入同名的
+# zz-generate-wifi-config（逻辑相同），两者不冲突。
 ###############################################################################
 
 echo
 echo "========================================"
-echo "设置 Wi-Fi 首次启动自动开启"
+echo "设置 Wi-Fi 首次启动仅生成配置"
 echo "========================================"
 
 mkdir -p files/etc/uci-defaults
 
-cat > files/etc/uci-defaults/zz-enable-wifi <<'EOF'
+cat > files/etc/uci-defaults/zz-generate-wifi-config <<'EOF'
 #!/bin/sh
-
-. /lib/functions.sh
 
 # 等待无线配置真正出现（最多约 30 秒，适配 ath11k / IPQ 晚加载）
 i=0
@@ -577,34 +580,16 @@ while [ $i -lt 30 ]; do
     i=$((i + 1))
 done
 
-# 仍不存在则强制生成一次
+# 仍不存在则生成一次；wifi config 只补充未配置的设备，
+# 保留已有 SSID、密码与开关状态。
 [ -s /etc/config/wireless ] || wifi config 2>/dev/null || true
-
-[ -s /etc/config/wireless ] || exit 0
-
-config_load wireless
-
-enable_all()
-{
-    local cfg="$1"
-    uci -q set "wireless.${cfg}.disabled=0"
-}
-
-# 同时处理 wifi-device 和 wifi-iface（兼容新旧 wifi-scripts）
-config_foreach enable_all wifi-device
-config_foreach enable_all wifi-iface
-
-uci -q commit wireless
-
-# 真正拉起无线
-wifi up 2>/dev/null || wifi 2>/dev/null || true
 
 exit 0
 EOF
 
-chmod +x files/etc/uci-defaults/zz-enable-wifi
+chmod +x files/etc/uci-defaults/zz-generate-wifi-config
 
-echo "Wi-Fi 首次启动自动开启已设置（带等待 + wifi up）"
+echo "Wi-Fi 首次启动仅生成配置已设置（不改动 disabled 状态）"
 
 
 ###############################################################################
