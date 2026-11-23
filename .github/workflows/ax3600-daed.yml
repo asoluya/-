@@ -81,30 +81,6 @@ jobs:
       run: |
         git clone ${{ env.REPO_URL }} -b ${{ env.REPO_BRANCH }} openwrt
 
-    # 缓存：ccache 让未改动的包跳过重复编译；dl 缓存省去每次下载源码包。
-    # key 带 run_id 保证每次运行结束保存最新缓存，restore-keys 回退到最近一份。
-    - name: 恢复 ccache 编译缓存
-      if: env.BUILD_CONFIG_ONLY != 'true'
-      uses: actions/cache@v4
-      with:
-        path: openwrt/.ccache
-        key: ax3600-ccache-${{ github.run_id }}
-        restore-keys: |
-          ax3600-ccache-
-
-    - name: 恢复 dl 源码包缓存
-      if: env.BUILD_CONFIG_ONLY != 'true'
-      uses: actions/cache@v4
-      with:
-        path: openwrt/dl
-        key: ax3600-dl-${{ github.run_id }}
-        restore-keys: |
-          ax3600-dl-
-
-    - name: 限制 ccache 上限
-      if: env.BUILD_CONFIG_ONLY != 'true'
-      run: CCACHE_DIR="$GITHUB_WORKSPACE/openwrt/.ccache" ccache -M 4G || true
-
     - name: 执行DIY_P1_SH
       run: |
         chmod +x "${GITHUB_WORKSPACE}/${{ env.DIY_P1_SH }}"
