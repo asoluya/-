@@ -121,6 +121,9 @@ echo 'src-git small https://github.com/kenzok8/small.git' >> feeds.conf.default
 
 # dae / daed / luci-app-daede 专用源（kenzok8/openwrt-daede）
 echo 'src-git daede https://github.com/kenzok8/openwrt-daede.git' >> feeds.conf.default
+
+# Honk 透明代理源（kenzok8/openwrt-honk，与 daede 并存试用，honk 分支专用）
+echo 'src-git honk https://github.com/kenzok8/openwrt-honk.git' >> feeds.conf.default
 # echo 'src-git small_package https://github.com/kenzok8/small-package.git' >> feeds.conf.default
 
 # Kiddin9

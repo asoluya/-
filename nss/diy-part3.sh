@@ -907,6 +907,33 @@ echo "dl/go-mod-cache 已清理（编译时按 go.mod 重新下载）"
 
 
 ###############################################################################
+# 14.5 Honk 默认不自启（与 dae 并存试用）
+# Honk 与 daed 都是 TC eBPF 透明代理，同时运行会抢挂载点。固件同时
+# 集成两者时，Honk 只装不跑：首次启动用 uci-defaults 关掉其自启，
+# 试用时先停 daed，再到 LuCI「服务 → Honk」初始化并启动。
+###############################################################################
+
+echo
+echo "========================================"
+echo "写入 uci-defaults：Honk 默认不自启"
+echo "========================================"
+
+mkdir -p package/base-files/files/etc/uci-defaults
+
+cat > package/base-files/files/etc/uci-defaults/99-honk-manual-start <<'EOF'
+#!/bin/sh
+
+/etc/init.d/honk disable 2>/dev/null
+
+exit 0
+EOF
+
+chmod +x package/base-files/files/etc/uci-defaults/99-honk-manual-start
+
+echo "已生成 99-honk-manual-start"
+
+
+###############################################################################
 # 15. DIY2 完成
 ###############################################################################
 
