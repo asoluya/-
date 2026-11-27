@@ -907,30 +907,30 @@ echo "dl/go-mod-cache 已清理（编译时按 go.mod 重新下载）"
 
 
 ###############################################################################
-# 14.5 Honk 默认不自启（与 dae 并存试用）
-# Honk 与 daed 都是 TC eBPF 透明代理，同时运行会抢挂载点。固件同时
-# 集成两者时，Honk 只装不跑：首次启动用 uci-defaults 关掉其自启，
-# 试用时先停 daed，再到 LuCI「服务 → Honk」初始化并启动。
+# 14.5 默认代理核心：Honk（daed 默认不自启）
+# 2026-11-28 起默认核心改为 Honk。Honk 与 daed 都是 TC eBPF 透明代理，
+# 同时运行会抢挂载点：首次启动用 uci-defaults 关掉 daed 自启，Honk 保持
+# 软件包默认自启。大鹅保留安装作备用，需要时先停 Honk 再到 LuCI 启动 daed。
 ###############################################################################
 
 echo
 echo "========================================"
-echo "写入 uci-defaults：Honk 默认不自启"
+echo "写入 uci-defaults：daed 默认不自启（默认核心 Honk）"
 echo "========================================"
 
 mkdir -p package/base-files/files/etc/uci-defaults
 
-cat > package/base-files/files/etc/uci-defaults/99-honk-manual-start <<'EOF'
+cat > package/base-files/files/etc/uci-defaults/99-dae-manual-start <<'EOF'
 #!/bin/sh
 
-/etc/init.d/honk disable 2>/dev/null
+/etc/init.d/daed disable 2>/dev/null
 
 exit 0
 EOF
 
-chmod +x package/base-files/files/etc/uci-defaults/99-honk-manual-start
+chmod +x package/base-files/files/etc/uci-defaults/99-dae-manual-start
 
-echo "已生成 99-honk-manual-start"
+echo "已生成 99-dae-manual-start"
 
 
 ###############################################################################
